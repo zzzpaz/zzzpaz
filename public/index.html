@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1, viewport-fit=cover"
+    >
+
+    <meta
+        name="theme-color"
+        content="#090b14"
+    >
+
+    <title>DEA IMUP</title>
+
+    <link
+        rel="stylesheet"
+        href="/css/app.css?v=3"
+    >
+</head>
+
+<body>
+
+<div class="app-shell">
+
+    <!-- =========================
+         SIDEBAR
+    ========================== -->
+
+    <aside
+        class="sidebar"
+        id="sidebar"
+    >
+
+        <div class="brand">
+
+            <div class="brand-mark">
+                ✦
+            </div>
+
+            <div class="brand-text">
+                <strong>DEA IMUP</strong>
+                <span>AI Assistant</span>
+            </div>
+
+        </div>
+
+
+        <button
+            class="new-chat"
+            id="newChat"
+            type="button"
+        >
+            <span>＋</span>
+            Chat baru
+        </button>
+
+
+        <div class="side-section">
+
+            <div class="side-label">
+                FITUR
+            </div>
+
+            <button
+                class="side-item"
+                type="button"
+                data-prompt="Cari informasi terbaru tentang teknologi AI hari ini."
+            >
+                <span>⌕</span>
+                Web Search
+            </button>
+
+            <button
+                class="side-item"
+                type="button"
+                data-prompt="Jelaskan topik ini dengan bahasa sederhana: "
+            >
+                <span>✦</span>
+                Jelaskan sesuatu
+            </button>
+
+            <button
+                class="side-item"
+                type="button"
+                data-prompt="Bantu saya menulis kode untuk: "
+            >
+                <span>⌘</span>
+                Coding
+            </button>
+
+        </div>
+
+
+        <div class="sidebar-bottom">
+
+            <div class="status-pill">
+                <i></i>
+                <span>DEA IMUP online</span>
+            </div>
+
+        </div>
+
+    </aside>
+
+
+    <!-- =========================
+         MAIN
+    ========================== -->
+
+    <main class="main">
+
+        <!-- TOP BAR -->
+
+        <header class="topbar">
+
+            <button
+                class="icon-btn mobile-menu"
+                id="menuBtn"
+                type="button"
+                aria-label="Buka menu"
+            >
+                ☰
+            </button>
+
+
+            <div class="model-chip">
+
+                <span class="spark">
+                    ✦
+                </span>
+
+                <span>
+                    DEA IMUP
+                </span>
+
+                <small>
+                    Web Search
+                </small>
+
+            </div>
+
+        </header>
+
+
+        <!-- =========================
+             CHAT AREA
+        ========================== -->
+
+        <section
+            class="chat-area"
+            id="chatArea"
+        >
+
+            <!-- WELCOME -->
+
+            <div
+                class="welcome"
+                id="welcome"
+            >
+
+                <div class="hero-orb">
+
+                    <div class="orb-core">
+                        ✦
+                    </div>
+
+                </div>
+
+
+                <h1>
+                    Halo, saya
+                    <span>DEA IMUP</span>
+                </h1>
+
+
+                <p>
+                    Tanyakan apa saja. Saya dapat membantu
+                    menjawab pertanyaan dan mencari informasi
+                    terbaru di web.
+                </p>
+
+            </div>
+
+
+            <!-- MESSAGES -->
+
+            <div
+                class="messages"
+                id="messages"
+            ></div>
+
+        </section>
+
+
+        <!-- =========================
+             COMPOSER
+        ========================== -->
+
+        <div
+            class="composer-wrap"
+            id="composerWrap"
+        >
+
+            <form
+                class="composer"
+                id="chatForm"
+            >
+
+                <textarea
+                    id="messageInput"
+                    rows="1"
+                    autocomplete="off"
+                    spellcheck="true"
+                    placeholder="Tanya apa saja kepada DEA IMUP..."
+                ></textarea>
+
+
+                <button
+                    class="send-btn"
+                    id="sendBtn"
+                    type="submit"
+                    aria-label="Kirim"
+                >
+                    <span>↑</span>
+                </button>
+
+            </form>
+
+
+            <div class="composer-note">
+                DEA IMUP dapat menggunakan web search
+                untuk membantu memverifikasi informasi.
+            </div>
+
+        </div>
+
+    </main>
+
+</div>
+
+
+<script src="/js/app.js?v=3"></script>
+
+</body>
+</html>

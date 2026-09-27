@@ -1,0 +1,163 @@
+const form = document.getElementById("chatForm");
+const input = document.getElementById("messageInput");
+const sendBtn = document.getElementById("sendBtn");
+const messages = document.getElementById("messages");
+const welcome = document.getElementById("welcome");
+const newChat = document.getElementById("newChat");
+const clearBtn = document.getElementById("clearBtn");
+const menuBtn = document.getElementById("menuBtn");
+const sidebar = document.getElementById("sidebar");
+
+function escapeHtml(value) {
+  return value
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
+function addMessage(role, text, sources = []) {
+  welcome.style.display = "none";
+
+  const item = document.createElement("div");
+  item.className = `message ${role}`;
+
+  const safe = escapeHtml(text);
+
+  let sourcesHtml = "";
+  if (sources.length) {
+    sourcesHtml = `
+      <div class="sources">
+        ${sources.map(s => `
+          <a class="source" href="${escapeHtml(s.url)}" target="_blank" rel="noopener noreferrer">
+            ${escapeHtml(s.title)}
+          </a>
+        `).join("")}
+      </div>
+    `;
+  }
+
+  item.innerHTML = `
+    <div class="avatar">${role === "user" ? "U" : "Z"}</div>
+    <div>
+      <div class="bubble">${safe}</div>
+      ${sourcesHtml}
+    </div>
+  `;
+
+  messages.appendChild(item);
+  scrollToBottom();
+}
+
+function addTyping() {
+  const item = document.createElement("div");
+  item.className = "message assistant";
+  item.id = "typingMessage";
+  item.innerHTML = `
+    <div class="avatar">Z</div>
+    <div class="bubble">
+      <div class="typing"><i></i><i></i><i></i></div>
+    </div>
+  `;
+  messages.appendChild(item);
+  scrollToBottom();
+}
+
+function removeTyping() {
+  document.getElementById("typingMessage")?.remove();
+}
+
+function scrollToBottom() {
+  const area = document.getElementById("chatArea");
+  area.scrollTop = area.scrollHeight;
+}
+
+async function sendMessage(message) {
+  const text = message.trim();
+  if (!text || sendBtn.disabled) return;
+
+  addMessage("user", text);
+  input.value = "";
+  autoResize();
+
+  sendBtn.disabled = true;
+  addTyping();
+
+  try {
+    const response = await fetch("/api/chat", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ message: text })
+    });
+
+    const data = await response.json();
+
+    removeTyping();
+
+    if (!response.ok || !data.success) {
+      throw new Error(data.error || data.message || "Request gagal.");
+    }
+
+    addMessage("assistant", data.reply, data.sources || []);
+  } catch (error) {
+    removeTyping();
+    addMessage(
+      "assistant",
+      `Maaf, terjadi masalah: ${error.message}`
+    );
+  } finally {
+    sendBtn.disabled = false;
+    input.focus();
+  }
+}
+
+form.addEventListener("submit", (event) => {
+  event.preventDefault();
+  sendMessage(input.value);
+});
+
+input.addEventListener("keydown", (event) => {
+  if (event.key === "Enter" && !event.shiftKey) {
+    event.preventDefault();
+    form.requestSubmit();
+  }
+});
+
+input.addEventListener("input", autoResize);
+
+function autoResize() {
+  input.style.height = "auto";
+  input.style.height = Math.min(input.scrollHeight, 150) + "px";
+}
+
+document.querySelectorAll("[data-prompt]").forEach(button => {
+  button.addEventListener("click", () => {
+    input.value = button.dataset.prompt;
+    autoResize();
+    input.focus();
+
+    if (button.closest(".suggestions")) {
+      sendMessage(input.value);
+    }
+  });
+});
+
+newChat.addEventListener("click", () => {
+  messages.innerHTML = "";
+  welcome.style.display = "";
+  input.value = "";
+  autoResize();
+  input.focus();
+  sidebar.classList.remove("open");
+});
+
+clearBtn.addEventListener("click", () => {
+  messages.innerHTML = "";
+  welcome.style.display = "";
+});
+
+menuBtn.addEventListener("click", () => {
+  sidebar.classList.toggle("open");
+});
+
